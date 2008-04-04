@@ -15,7 +15,15 @@ struct Merge{
 };
 
 void scan_directory(Merge &status, std::string directory){
-	
+	std::vector< std::string > ls = get_directory(directory);
+	foreach(std::string entry, ls){
+		if(is_file(entry) && check_ending(entry)){
+			status.num_files++;
+			status.paths.push_back(directory + "/" + entry);
+		} else if(is_dir(entry)) {
+			scan_directory(status, directory + "/" + entry);
+		}
+	}
 }
 
 void AMerge::perform_action_merge(){
