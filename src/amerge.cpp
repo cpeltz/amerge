@@ -1,6 +1,8 @@
 #include "amerge.hpp"
 #include <iostream>
 #include <boost/filesystem.hpp>
+#include <cctype>
+#include <algorithm>
 
 #define foreach BOOST_FOREACH
 
@@ -13,36 +15,42 @@ using std::flush;
 struct Merge{
 	int num_files;
 	int num_dirs;
-	std::vector< fs::path > paths;
+	std::vector< const fs::path > paths;
 	Merge():num_files(0),num_dirs(0){}
 };
 
+char _lower( char ch ) {
+	return static_cast<char>( std::tolower( (int) ch ) );
+}
+
+void to_lower( std::string &str ) {
+	std::transform( str.begin(), str.end(), str.begin(), _lower );
+}
+
 bool has_valid_extension( const fs::path &path ) {
-	std::string ending = path.leaf();
-	std::string::size_type pos = ending.find_last_of( '.' );
-	ending = ending.substr( pos + 1 );
-	ending.to_lower();
+	std::string ending = fs::extension( path );
+	to_lower( ending );
 	foreach( const char* ext, extensions ) {
-		if(endling == ext) {
+		if(ending == ext) {
 			return true;
 		}
 	}
 	return false;
 }
 
-void scan_directory(Merge &status, const fs::path &directory) { // TODO Implement exists(), is_directory(), is_file() and has_valid_extension()
-	if( !exists(directory) ) {
+void scan_directory(Merge &status, const fs::path &directory) { 
+	if( !fs::exists( directory ) ) {
 		cout << "ERROR: Directory " << directory << " does not exist!" << endl;
 		return;
 	}
-	fs::directory_iterator dir_iter = directory.begin(), end_iter;
+	fs::directory_iterator dir_iter( directory ), end_iter;
 	for( ; dir_iter != end_iter; dir_iter++ ){
-		if( is_directory(*dir_iter) ) {
+		if( fs::is_directory(dir_iter->path()) ) {
 			status.num_dirs++;
-			scan_directory( *dir_iter );
-		} else if ( is_file(*dir_iter) && has_valid_extension(*dir_iter) ) {
+			scan_directory( dir_iter->path() );
+		} else if ( fs::is_regular(dir_iter->path()) && has_valid_extension(dir_iter->path()) ) {
 			status.num_files++;
-			status.paths.push_back( *dir_iter );
+			status.paths.push_back( dir_iter->path() );
 		}
 	}
 }
@@ -56,6 +64,8 @@ void AMerge::perform_action_merge(){
 	}
 	cout << "done" << endl;
 	cout << "Scanned " << status.num_files << " files in " << status.num_dirs << "directories" << endl;
+	cout << "Beginning merge " << flush;
+	// TODO Fortschrittsbalken
 }
 
 void AMerge::perform_action_defrag(){}
