@@ -1,6 +1,7 @@
 #include "amerge.hpp"
 #include <iostream>
 #include <boost/filesystem.hpp>
+#include <boost/foreach.hpp>
 #include <cctype>
 #include <algorithm>
 
@@ -15,7 +16,7 @@ using std::flush;
 struct Merge{
 	int num_files;
 	int num_dirs;
-	std::vector< const fs::path > paths;
+	std::vector< fs::path > paths;
 	Merge():num_files(0),num_dirs(0){}
 };
 
@@ -47,7 +48,7 @@ void scan_directory(Merge &status, const fs::path &directory) {
 	for( ; dir_iter != end_iter; dir_iter++ ){
 		if( fs::is_directory(dir_iter->path()) ) {
 			status.num_dirs++;
-			scan_directory( dir_iter->path() );
+			scan_directory( status, dir_iter->path() );
 		} else if ( fs::is_regular(dir_iter->path()) && has_valid_extension(dir_iter->path()) ) {
 			status.num_files++;
 			status.paths.push_back( dir_iter->path() );
@@ -63,7 +64,7 @@ void AMerge::perform_action_merge(){
 		scan_directory(status, directory);
 	}
 	cout << "done" << endl;
-	cout << "Scanned " << status.num_files << " files in " << status.num_dirs << "directories" << endl;
+	cout << "Scanned " << status.num_files << " files in " << status.num_dirs << " directories" << endl;
 	cout << "Beginning merge " << flush;
 	// TODO Fortschrittsbalken
 }

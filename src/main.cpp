@@ -4,6 +4,8 @@
 
 #include <boost/program_options.hpp>
 
+#include "amerge.hpp"
+
 namespace po = boost::program_options;
 
 int main(int argc, char **argv) {
@@ -26,6 +28,9 @@ int main(int argc, char **argv) {
 		std::cout << desc;
 		return 0;
 	}
+
+	AMerge app( dirs );
+	app.perform_action( MERGE );
 
 	return 0;
 }

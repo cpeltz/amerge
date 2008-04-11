@@ -1,21 +1,24 @@
+#ifndef AMERGE_HPP
+#define AMERGE_HPP
+
 #include <vector>
 #include <string>
 
-const char* extensions[] = {"jpg", "jpeg", "gif", "bmp", "png", "tiff"};
+static const char* extensions[] = {".jpg", ".jpeg", ".gif", ".bmp", ".png", ".tiff"};
 
-typedef enum Action = { MERGE, DEFRAG };
+typedef enum Action { MERGE, DEFRAG };
 
-class LogFacility;
 
 class AMerge {
-	std::vector< std::string > _directories
-	LogFacility &log;
+	std::vector< std::string > _directories;
 
 	void perform_action_merge();
 	void perform_action_defrag();
  public:
-	AMerge(LogFacility &log, std::vector< std::string > directories);
+	AMerge(std::vector< std::string > directories);
 	~AMerge();
 
 	void perform_action(Action action);
 };
+
+#endif 
