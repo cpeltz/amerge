@@ -9,7 +9,7 @@ namespace fs = boost::filesystem;
 
 static const char* extensions[] = {".jpg", ".jpeg", ".gif", ".bmp", ".png", ".tiff"};
 
-typedef enum Action { MERGE, DEFRAG };
+typedef enum Action { CREATE, DEFRAG };
 
 
 class AMerge {
@@ -17,8 +17,9 @@ class AMerge {
 	int _start_number;
 	fs::path _out_dir;
 
-	int perform_action_merge();
+	int perform_action_create();
 	int perform_action_defrag();
+
  public:
 	AMerge(std::vector< std::string > directories);
 	~AMerge();
