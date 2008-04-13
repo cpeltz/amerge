@@ -1,0 +1,51 @@
+Current Version: 0.1
+
+Milestones
+
+0.1
+Action merge works, amerge can be unsavely used.
+Files will be sorted befor copy_and_rename.
+
+0.2
+Action defrag works.
+Copied files will have correct rights.
+
+0.3 (error stone)
+Check on most errors and handle them (especially Boost::Filesystem exceptions)
+
+0.4 (maids release)
+tidy up code, maybe rewrite some parts, so they will fit in better (until now everything just grew)
+
+0.5
+Action unique works, as well as batch action unique_defrag
+
+0.6
+redefine actions: merge -> create
+new action: insert ( adds contents of a new dir to a already created dir )
+
+0.7
+flag for auto-remove-src-dir
+
+0.8
+Progress bar
+
+0.9
+write tests
+User Documentation (man file)
+Dev Documentation (doxygen)
+
+1.0
+Handle all errors, tidy up code
+
+2.0 (every item on this list is a 0.1 increase)
+Logging facility
+Config File
+File extensions configuration
+i18n (gettext)
+GUI
+watcher mode ( amerge looks into specified dir and every accepted file will be immediatly renamed and copied into the other specified dir )
+automatic sub-dir creation (if there are too much files [config] create sub-dirs, e.g. for files 0 - 3000, for files 3001 - 6000, etc pp
+
+-----Ideas-----
+Hooks
+Script support
