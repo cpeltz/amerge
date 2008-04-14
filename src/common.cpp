@@ -1,4 +1,5 @@
 #include "common.hpp"
+#include <sys/stat.h>
 
 char _lower( char ch ) {
 	return static_cast<char>( std::tolower( (int) ch ) );
@@ -19,7 +20,7 @@ bool has_valid_extension( const fs::path &path ) {
 	return false;
 }
 
-void scan_directory( Stat &status, const fs::path &directory, FLAGS flags ) { 
+void scan_directory( Stat &status, const fs::path &directory, int flags ) { 
 	if( !fs::exists( directory ) ) {
 		cout << "ERROR: Directory " << directory << " does not exist!" << endl;
 		return;
@@ -28,22 +29,22 @@ void scan_directory( Stat &status, const fs::path &directory, FLAGS flags ) {
 	for( ; dir_iter != end_iter; dir_iter++ ){
 		if( fs::is_directory(dir_iter->path()) ) {
 			status.num_dirs++;
-			if( flags == SCAN_MODE_RECURSIVE ) {
+			if( flags & SCAN_MODE_RECURSIVE ) {
 				scan_directory( status, dir_iter->path() );
 			}
-			if( flags == SCAN_MODE_DIRS ) {
+			if( flags & SCAN_MODE_DIRS ) {
 				status.paths.push_back( dir_iter->path() );
 			}
 		} else if ( fs::is_regular(dir_iter->path()) && has_valid_extension(dir_iter->path()) ) {
 			status.num_files++;
-			if( flags == SCAN_MODE_FILES ) {
+			if( flags & SCAN_MODE_FILES ) {
 				status.paths.push_back( dir_iter->path() );
 			}
 		}
 	}
 }
 
-void copy_and_rename( Stat &status, fs::path &out_dir, int start_number ) {
+void copy_and_rename( Stat &status, const fs::path &out_dir, int start_number ) {
 	std::string extension, number_str;
 	foreach( fs::path src, status.paths ) {
 		std::stringstream sstream;
@@ -55,6 +56,7 @@ void copy_and_rename( Stat &status, fs::path &out_dir, int start_number ) {
 		number_str = sstream.str();
 		fs::path dest = out_dir / (number_str + extension);
 		fs::copy_file( src, dest );
+		chmod( dest.file_string().c_str(), S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH );
 //		cout << src << ", " << dest  << ";" << endl; // for debugging purposes
 		start_number++;
 	}

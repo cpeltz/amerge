@@ -39,7 +39,7 @@ int AMerge::perform_action_create(){
 	if( check_output_directory( _out_dir ) == 1 ) {
 		return 1;
 	}
-	cout << "done!";
+	cout << "done" << endl;
 
 	cout << "Beginning create ..." << flush;
 	// TODO Fortschrittsbalken

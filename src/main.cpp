@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
 		("start-number,s", po::value<int>(&start_number)->default_value(0), "start numbering files from this offset on")
 		("input-dir,i", po::value< std::vector<std::string> >(&dirs), "specify directories to work on")
 		("output-dir,o", po::value< std::string >(&out_dir), "specify output directory")
-		("action,a", po::value< std::string >(&action), "can be merge or defrag at the moment")
+		("action,a", po::value< std::string >(&action), "can be create or defrag at the moment")
 	;
 	po::positional_options_description p;
 	p.add("input-dir", -1);
@@ -39,8 +39,8 @@ int main(int argc, char **argv) {
 	app.set_start_number( start_number );
 	app.set_output_directory( out_dir );
 
-	if( action == "merge" ) {
-		return app.perform_action( MERGE );
+	if( action == "create" ) {
+		return app.perform_action( CREATE );
 	} else if( action == "defrag" ) {
 		return app.perform_action( DEFRAG );
 	} 

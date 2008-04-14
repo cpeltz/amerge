@@ -25,11 +25,11 @@ struct Stat {
 //0 = normal (recursive, don't add dirs)
 //1 = not recursive, don't add dirs
 //2 = not recursive, don't add files but dirs
-enum FLAGS {	SCAN_MODE_RECURSIVE = 1, 
-				SCAN_MODE_FILES = 2,
-				SCAN_MODE_DIRS = 4 };
+typedef enum FLAGS {	SCAN_MODE_RECURSIVE = 1, 
+						SCAN_MODE_FILES = 2,
+						SCAN_MODE_DIRS = 4 };
 
-void copy_and_rename( Stat &status, fs::path &out_dir, int start_number );
-void scan_directory( Stat &status, const fs::path &directory, FLAGS flags = SCAN_MODE_RECURSIVE | SCAN_MODE_FILES );
+void copy_and_rename( Stat &status, const fs::path &out_dir, int start_number );
+void scan_directory( Stat &status, const fs::path &directory, int flags = SCAN_MODE_RECURSIVE | SCAN_MODE_FILES );
 
 #endif
