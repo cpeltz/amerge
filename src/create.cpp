@@ -1,26 +1,5 @@
 #include "common.hpp"
 
-int check_output_directory( fs::path &out_dir ) {
-	// Check whether the output directory exists, is a directory, is empty and we have the proper rights
-	fs::ofstream out;
-	out.open(out_dir / "test" );
-	if( !fs::exists(out_dir) ) {
-		fs::create_directory(out_dir);
-	} else if( !fs::is_directory(out_dir) ) {
-		std::cerr << "ERROR: " << out_dir << " is not a directory" << endl;
-		return 1;
-	} else if( fs::is_empty(out_dir) ) {
-		std::cerr << "ERROR: " << out_dir << " is not empty" << endl;
-		return 1;
-	} else if( !out.is_open() ) {
-		std::cerr << "ERROR: We do not have proper rights for " << out_dir << endl;
-		return 1;
-	}
-	out.close();
-	fs::remove( out_dir / "test" ); 
-	return 0;
-}
-
 int AMerge::perform_action_create() {
 	try {
 		Stat status;
@@ -37,7 +16,7 @@ int AMerge::perform_action_create() {
 		cout << "done" << endl;
 
 		cout << "Checking output directory ..." << flush;
-		if( check_output_directory( _out_dir ) == 1 ) {
+		if( check_directory( _out_dir, CHECK_CREATE ) == 1 ) {
 			return 1;
 		}
 		cout << "done" << endl;
