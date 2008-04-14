@@ -19,6 +19,12 @@ int AMerge::perform_action(Action action){
 		case DEFRAG:
 			return perform_action_defrag();
 			break;
+		case UNIQUE:
+			return perform_action_unique();
+			break;
+		case INSERT:
+			return perform_action_insert();
+			break;
 		default:
 			break;
 	}

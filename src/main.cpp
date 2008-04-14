@@ -44,7 +44,15 @@ int main(int argc, char **argv) {
 		return app.perform_action( CREATE );
 	} else if( action == "defrag" ) {
 		return app.perform_action( DEFRAG );
-	} 
+	} else if( action == "unique" ) {
+		return app.perform_action( UNIQUE );
+	} else if( action == "insert" ) {
+		return app.perform_action( INSERT );
+	} else if( action == "unique_defrag" ) {
+		return (app.perform_action( UNIQUE ) || app.perform_action( DEFRAG )) ? 1 : 0;
+	}
+
+
 
 	std::cout << "Unknown action" << std::endl;
 	return 1;
