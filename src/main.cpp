@@ -32,6 +32,7 @@ int main(int argc, char **argv) {
 		return 0;
 	} else if( !vm.count("action") ) {
 		std::cout << "You need to specify an action" << std::endl;
+		std::cout << desc;
 		return 1;
 	}
 
