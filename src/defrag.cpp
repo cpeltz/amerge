@@ -17,9 +17,9 @@ void remove_directories( fs::path dir ) {
 }
 
 int AMerge::perform_action_defrag() {
-	cout << "Action DEFRAG selected" << endl;
-	foreach( fs::path dir, _directories ) {
-		try {
+	try {
+		cout << "Action DEFRAG selected" << endl;
+		foreach( fs::path dir, _directories ) {
 			Stat status;
 			
 			cout << "Scanning directory ..." << flush;
@@ -47,16 +47,16 @@ int AMerge::perform_action_defrag() {
 			move( dir / ".amerge", dir );
 			remove_directories( dir );
 			cout << "done" << endl;
-		} catch(fs::filesystem_error) {
-			cout << "failed" << endl;
-			cout << "A filesystem operation has failed" << endl 
-				<< "Please check whether you have sufficient rights" << endl;
-			return 1;
-		} catch(std::bad_alloc) {
-			// Bad ... very bad
-			std::cerr << "Out of Memory" << std::endl;
-			return 1;
 		}
+	} catch(fs::filesystem_error) {
+		cout << "failed" << endl;
+		cout << "A filesystem operation has failed" << endl 
+			<< "Please check whether you have sufficient rights" << endl;
+		return 1;
+	} catch(std::bad_alloc) {
+		// Bad ... very bad
+		std::cerr << "Out of Memory" << std::endl;
+		return 1;
 	}
 	return 0;
 }

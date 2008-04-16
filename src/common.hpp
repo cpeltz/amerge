@@ -20,6 +20,10 @@ struct Stat {
 	int num_dirs;
 	std::vector< fs::path > paths;
 	Stat() : num_files(0), num_dirs(0) {}
+	virtual ~Stat(){}
+	virtual void add( const fs::path &path ) {
+		paths.push_back( path );
+	}
 };
 
 //1 = scan recursively

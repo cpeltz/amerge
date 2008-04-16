@@ -33,12 +33,12 @@ void scan_directory( Stat &status, const fs::path &directory, int flags ) {
 				scan_directory( status, dir_iter->path() );
 			}
 			if( flags & SCAN_MODE_DIRS ) {
-				status.paths.push_back( dir_iter->path() );
+				status.add( dir_iter->path() );
 			}
 		} else if( fs::is_regular(dir_iter->path()) && (has_valid_extension(dir_iter->path()) || (SCAN_MODE_NOEXTENSION & flags)) ) {
 			status.num_files++;
 			if( flags & SCAN_MODE_FILES ) {
-				status.paths.push_back( dir_iter->path() );
+				status.add( dir_iter->path() );
 			}
 		}
 	}
@@ -78,7 +78,7 @@ int check_directory( const fs::path &dir, int flags ) {
 	} else if( flags & CHECK_CLEAR ) {
 		Stat stat;
 		scan_directory( stat, dir / ".amerge", SCAN_MODE_RECURSIVE | SCAN_MODE_DIRS | SCAN_MODE_FILES );
-		stat.paths.push_back( dir / ".amerge" );
+		stat.add( dir / ".amerge" );
 		std::sort( stat.paths.begin(), stat.paths.end() );
 		remove( stat );
 	} else if( !fs::is_directory(dir) ) {
