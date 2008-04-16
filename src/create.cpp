@@ -9,10 +9,10 @@ int AMerge::perform_action_create() {
 			scan_directory(status, directory);
 		}
 		cout << "done" << endl;
-		cout << "Scanned " << status.num_files << " files in " << status.num_dirs << " directories" << endl;
+		cout << "Scanned " << status.get_num_files() << " files in " << status.get_num_dirs() << " directories" << endl;
 
 		cout << "Sorting lexicographically ..." << flush;
-		std::sort( status.paths.begin(), status.paths.end() );
+		std::sort( status.begin(), status.end() );
 		cout << "done" << endl;
 
 		cout << "Checking output directory ..." << flush;

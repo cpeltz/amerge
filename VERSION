@@ -26,8 +26,8 @@ new action: insert ( adds contents of a new dir to a already created dir )
 0.7
 flag for auto-remove-src-dir
 
-0.8
-Progress bar
+0.8 (second maids release)
+Code cleanup/rewrite
 
 0.9
 write tests
@@ -38,6 +38,7 @@ Dev Documentation (doxygen)
 Handle all errors, tidy up code
 
 2.0 (every item on this list is a 0.1 increase)
+Progress bar
 Logging facility
 Config File
 File extensions configuration

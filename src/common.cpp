@@ -28,7 +28,7 @@ void scan_directory( Stat &status, const fs::path &directory, int flags ) {
 	fs::directory_iterator dir_iter( directory ), end_iter;
 	for( ; dir_iter != end_iter; dir_iter++ ){
 		if( fs::is_directory(dir_iter->path()) ) {
-			status.num_dirs++;
+			status.inc_dirs();
 			if( flags & SCAN_MODE_RECURSIVE ) {
 				scan_directory( status, dir_iter->path() );
 			}
@@ -36,7 +36,7 @@ void scan_directory( Stat &status, const fs::path &directory, int flags ) {
 				status.add( dir_iter->path() );
 			}
 		} else if( fs::is_regular(dir_iter->path()) && (has_valid_extension(dir_iter->path()) || (SCAN_MODE_NOEXTENSION & flags)) ) {
-			status.num_files++;
+			status.inc_files();
 			if( flags & SCAN_MODE_FILES ) {
 				status.add( dir_iter->path() );
 			}
@@ -46,7 +46,7 @@ void scan_directory( Stat &status, const fs::path &directory, int flags ) {
 
 void copy_and_rename( Stat &status, const fs::path &out_dir, int start_number ) {
 	std::string extension, number_str;
-	foreach( fs::path src, status.paths ) {
+	foreach( fs::path src, status ) {
 		std::stringstream sstream;
 		sstream.fill( '0' );
 		sstream.width( 5 );
@@ -79,7 +79,7 @@ int check_directory( const fs::path &dir, int flags ) {
 		Stat stat;
 		scan_directory( stat, dir / ".amerge", SCAN_MODE_RECURSIVE | SCAN_MODE_DIRS | SCAN_MODE_FILES );
 		stat.add( dir / ".amerge" );
-		std::sort( stat.paths.begin(), stat.paths.end() );
+		std::sort( stat.begin(), stat.end() );
 		remove( stat );
 	} else if( !fs::is_directory(dir) ) {
 		std::cerr << "ERROR: " << dir << " is not a directory" << endl;
@@ -97,7 +97,7 @@ int check_directory( const fs::path &dir, int flags ) {
 }
 
 void remove( Stat &status ) {
-	foreach( fs::path entry, status.paths ) {
+	foreach( fs::path entry, status ) {
 		fs::remove( entry );
 	}
 }

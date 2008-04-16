@@ -15,14 +15,45 @@ using std::cout;
 using std::endl;
 using std::flush;
 
-struct Stat {
+class Stat {
 	int num_files;
 	int num_dirs;
 	std::vector< fs::path > paths;
+
+ public:
+	typedef std::vector< fs::path >::iterator iterator;
+	typedef std::vector< fs::path >::const_iterator const_iterator;
+
 	Stat() : num_files(0), num_dirs(0) {}
+
 	virtual ~Stat(){}
+
 	virtual void add( const fs::path &path ) {
 		paths.push_back( path );
+	}
+
+	virtual iterator begin() {
+		return paths.begin();
+	}
+
+	virtual iterator end() {
+		return paths.end();
+	}
+
+	void inc_dirs() {
+		num_dirs++;
+	}
+
+	void inc_files() {
+		num_files++;
+	}
+
+	virtual int get_num_files() {
+		return num_files;
+	}
+
+	virtual int get_num_dirs() {
+		return num_dirs;
 	}
 };
 

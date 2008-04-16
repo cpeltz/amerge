@@ -5,22 +5,23 @@
 #include <functional>
 #include <boost/integer.hpp>
 
-typedef std::pair< fs::path, boost::uint_t<32>::fast > pair_type;
+//typedef std::pair< fs::path, boost::uint_t<32>::fast > pair_type;
 
-class marked_for_deletion : public std::unary_function<pair_type, bool > {
+/*class marked_for_deletion : public std::unary_function<pair_type, bool > {
  public:
 	result_type operator()(argument_type i) { 
 		return i.second == 0 ? true : false;
 	}
-};
+};*/
 		  
 class CRCTable : public Stat {
+	std::map< fs::path, boost::uint_t<32>::fast > table;
 
  public:
-	std::map< fs::path, boost::uint_t<32>::fast > table;
-	
+	virtual ~CRCTable(){}
+
 	void add( const fs::path &path ) {
-		paths.push_back( path );
+		Stat::add( path );
 		table.insert( std::make_pair( path, 0) );
 	}
 	
@@ -68,10 +69,10 @@ int AMerge::perform_action_unique() {
 			scan_directory(status, directory);
 		}
 		cout << "done" << endl;
-		cout << "Scanned " << status.num_files << " files in " << status.num_dirs << " directories" << endl;
+		cout << "Scanned " << status.get_num_files() << " files in " << status.get_num_dirs() << " directories" << endl;
 
 		cout << "Sorting lexicographically ..." << flush;
-		std::sort( status.paths.begin(), status.paths.end() );
+		std::sort( status.begin(), status.end() );
 		cout << "done" << endl;
 
 		cout << "Create CRC-Table ..." << flush;

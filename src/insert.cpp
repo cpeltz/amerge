@@ -23,7 +23,7 @@ int AMerge::perform_action_insert() {
 
 		cout << "Beginning insert ..." << flush;
 		copy_and_rename( status, _out_dir, _start_number );
-		cout << "done" << endl;
+		cout << "done" << endl;*/
 
 	} catch (fs::filesystem_error) {
 		cout << "failed" << endl;
@@ -34,6 +34,6 @@ int AMerge::perform_action_insert() {
 		// Bad ... very bad
 		std::cerr << "Out of Memory" << std::endl;
 		return 1;
-	}*/
+	}
 	return 1;
 }

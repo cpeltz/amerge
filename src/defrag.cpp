@@ -3,7 +3,7 @@
 void move( fs::path src, fs::path dest ) {
 	Stat status;
 	scan_directory( status, src, SCAN_MODE_FILES );
-	foreach( fs::path file, status.paths ) {
+	foreach( fs::path file, status ) {
 		fs::rename( file, dest / file.leaf() );
 	}
 }
@@ -11,8 +11,8 @@ void move( fs::path src, fs::path dest ) {
 void remove_directories( fs::path dir ) {
 	Stat status;
 	scan_directory( status, dir, SCAN_MODE_DIRS );
-	std::sort( status.paths.begin(), status.paths.end() );
-	std::reverse( status.paths.begin(), status.paths.end() );
+	std::sort( status.begin(), status.end() );
+	std::reverse( status.begin(), status.end() );
 	remove( status );
 }
 
@@ -25,10 +25,10 @@ int AMerge::perform_action_defrag() {
 			cout << "Scanning directory ..." << flush;
 			scan_directory( status, dir );
 			cout << "done" << endl;
-			cout << "Scanned " << status.num_files << " files in " << status.num_dirs << " directories" << endl;
+			cout << "Scanned " << status.get_num_files() << " files in " << status.get_num_dirs() << " directories" << endl;
 			
 			cout << "Sorting lexicographically ..." << flush;
-			std::sort( status.paths.begin(), status.paths.end() );
+			std::sort( status.begin(), status.end() );
 			cout << "done" << endl;
 			
 			cout << "Check, Clean and Create temporary directory ..." << flush;
