@@ -40,6 +40,7 @@ int main(int argc, char **argv) {
 	app.set_start_number( start_number );
 	app.set_output_directory( out_dir );
 
+	std::cout << action << std::endl;
 	if( action == "create" ) {
 		return app.perform_action( CREATE );
 	} else if( action == "defrag" ) {

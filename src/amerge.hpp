@@ -16,6 +16,7 @@ class AMerge {
 	std::vector< std::string > _directories;
 	int _start_number;
 	fs::path _out_dir;
+	bool _auto_clear_src;
 
 	int perform_action_create();
 	int perform_action_defrag();

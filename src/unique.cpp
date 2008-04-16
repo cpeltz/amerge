@@ -68,20 +68,16 @@ int AMerge::perform_action_unique() {
 		foreach(std::string directory, _directories){
 			scan_directory(status, directory);
 		}
-		cout << "done" << endl;
 		cout << "Scanned " << status.get_num_files() << " files in " << status.get_num_dirs() << " directories" << endl;
 
 		cout << "Sorting lexicographically ..." << flush;
-		std::sort( status.begin(), status.end() );
-		cout << "done" << endl;
+		status.sort();
 
 		cout << "Create CRC-Table ..." << flush;
 		status.create_crc();
-		cout << "done!" << endl;
 
 		cout << "Find and remove duplicated entrys ..." << flush;
 		unsigned int deleted = status.unique();
-		cout << "done" << endl;
 		cout << "Removed " << deleted << " files" << endl;
 
 	} catch (fs::filesystem_error) {
@@ -94,5 +90,5 @@ int AMerge::perform_action_unique() {
 		std::cerr << "Out of Memory" << std::endl;
 		return 1;
 	}
-	return 1;
+	return 0;
 }

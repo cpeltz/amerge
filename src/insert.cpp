@@ -9,18 +9,15 @@ int AMerge::perform_action_insert() {
 		foreach(std::string directory, _directories){
 			scan_directory(status, directory);
 		}
-		cout << "done" << endl;
 		cout << "Scanned " << status.get_num_files() << " files in " << status.get_num_dirs() << " directories" << endl;
 
 		cout << "Sorting lexicographically ..." << flush;
-		std::sort( status.begin(), status.end() );
-		cout << "done" << endl;
+		status.sort();
 
 		cout << "Checking output directory ..." << flush;
 		if( check_directory( _out_dir, CHECK_CREATE ) == 1 ) {
 			return 1;
 		}
-		cout << "done" << endl;
 
 		cout << "Looking for last used number ..." << flush;
 		{
@@ -34,11 +31,9 @@ int AMerge::perform_action_insert() {
 			stream >> _start_number;
 			_start_number++;
 		}
-		cout << "done" << endl;
 
 		cout << "Beginning insert ..." << _start_number << flush;
-		copy_and_rename( status, _out_dir, _start_number );
-		cout << "done" << endl;
+		renumber( status, _out_dir, _start_number, COPY );
 
 	} catch (fs::filesystem_error exc) {
 		cout << "failed" << endl;
@@ -50,5 +45,5 @@ int AMerge::perform_action_insert() {
 		std::cerr << "Out of Memory" << std::endl;
 		return 1;
 	}
-	return 1;
+	return 0;
 }

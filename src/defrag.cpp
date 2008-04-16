@@ -10,7 +10,7 @@ void move( fs::path src, fs::path dest ) {
 
 void remove_directories( fs::path dir ) {
 	Stat status;
-	scan_directory( status, dir, SCAN_MODE_DIRS );
+	scan_directory( status, dir, SCAN_MODE_DIRS | SCAN_MODE_RECURSIVE );
 	std::sort( status.begin(), status.end() );
 	std::reverse( status.begin(), status.end() );
 	remove( status );
@@ -19,34 +19,35 @@ void remove_directories( fs::path dir ) {
 int AMerge::perform_action_defrag() {
 	try {
 		cout << "Action DEFRAG selected" << endl;
+		bool inplace = (!_out_dir.empty() && _directories.size() == 1) ?  false : true ;
+
 		foreach( fs::path dir, _directories ) {
 			Stat status;
+			_out_dir = inplace ? (dir / ".amerge") : _out_dir;
 			
-			cout << "Scanning directory ..." << flush;
+			cout << "Scanning directory " << dir << " ..." << flush;
 			scan_directory( status, dir );
-			cout << "done" << endl;
 			cout << "Scanned " << status.get_num_files() << " files in " << status.get_num_dirs() << " directories" << endl;
 			
 			cout << "Sorting lexicographically ..." << flush;
-			std::sort( status.begin(), status.end() );
-			cout << "done" << endl;
+			status.sort();
 			
 			cout << "Check, Clean and Create temporary directory ..." << flush;
-			check_directory( dir / ".amerge", CHECK_CLEAR | CHECK_CREATE );			
-			cout << "done" << endl;
+			check_directory( _out_dir, (inplace ? (CHECK_CLEAR | CHECK_CREATE) : CHECK_CREATE) );			
 			
-			cout << "Copy files into temporary dir an rename ..." << flush;
-			copy_and_rename( status, dir / ".amerge", _start_number );
-			cout << "done" << endl;
+			cout << "Rename files ..." << flush;
+			renumber( status, _out_dir, _start_number, (inplace ? MOVE : COPY) );
 			
-			cout << "Remove old files ..." << flush;
-			remove( status );
-			cout << "done" << endl;
+			if( inplace || _auto_clear_src ) {
+				cout << "Remove old files ..." << flush;
+				remove( status ) ;
+			}
 			
-			cout << "Cleaning up ..." << flush;
-			move( dir / ".amerge", dir );
-			remove_directories( dir );
-			cout << "done" << endl;
+			if( inplace ) {
+				cout << "Cleaning up ..." << flush;
+				move( _out_dir, dir );
+				remove_directories( dir );
+			}
 		}
 	} catch(fs::filesystem_error) {
 		cout << "failed" << endl;

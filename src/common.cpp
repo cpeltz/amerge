@@ -44,7 +44,7 @@ void scan_directory( Stat &status, const fs::path &directory, int flags ) {
 	}
 }
 
-void copy_and_rename( Stat &status, const fs::path &out_dir, int start_number ) {
+void renumber( const Stat &status, const fs::path &out_dir, int start_number, int flags ) {
 	std::string extension, number_str;
 	foreach( fs::path src, status ) {
 		std::stringstream sstream;
@@ -55,7 +55,12 @@ void copy_and_rename( Stat &status, const fs::path &out_dir, int start_number ) 
 		sstream << start_number;
 		number_str = sstream.str();
 		fs::path dest = out_dir / (number_str + extension);
-		fs::copy_file( src, dest );
+
+		if( flags & COPY )
+			fs::copy_file( src, dest );
+		else if( flags & MOVE )
+			fs::rename( src, dest );
+
 		if( chmod( dest.file_string().c_str(), S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH ) ) { // non-fatal permission error
 			std::cerr << "ERROR: Could not set permissions for " << dest << endl;
 		}
@@ -77,14 +82,14 @@ int check_directory( const fs::path &dir, int flags ) {
 		}
 	} else if( flags & CHECK_CLEAR ) {
 		Stat stat;
-		scan_directory( stat, dir / ".amerge", SCAN_MODE_RECURSIVE | SCAN_MODE_DIRS | SCAN_MODE_FILES );
-		stat.add( dir / ".amerge" );
+		scan_directory( stat, dir , SCAN_MODE_RECURSIVE | SCAN_MODE_DIRS | SCAN_MODE_FILES );
+		stat.add( dir );
 		std::sort( stat.begin(), stat.end() );
 		remove( stat );
 	} else if( !fs::is_directory(dir) ) {
 		std::cerr << "ERROR: " << dir << " is not a directory" << endl;
 		return 1;
-	} else if( fs::is_empty(dir) ) {
+	} else if( !fs::is_empty(dir) ) {
 		std::cerr << "ERROR: " << dir << " is not empty" << endl;
 		return 1;
 	} else if( !out.is_open() ) {
@@ -96,7 +101,7 @@ int check_directory( const fs::path &dir, int flags ) {
 	return 0;
 }
 
-void remove( Stat &status ) {
+void remove( const Stat &status ) {
 	foreach( fs::path entry, status ) {
 		fs::remove( entry );
 	}
