@@ -32,14 +32,15 @@ int AMerge::perform_action_insert() {
 			std::stringstream stream;
 			stream << fs::basename(*it);
 			stream >> _start_number;
+			_start_number++;
 		}
 		cout << "done" << endl;
 
-		cout << "Beginning insert ..." << flush;
+		cout << "Beginning insert ..." << _start_number << flush;
 		copy_and_rename( status, _out_dir, _start_number );
 		cout << "done" << endl;
 
-	} catch (fs::filesystem_error) {
+	} catch (fs::filesystem_error exc) {
 		cout << "failed" << endl;
 		cout << "A filesystem operation has failed" << endl 
 			<< "Please check whether you have sufficient rights" << endl;
