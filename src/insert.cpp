@@ -1,18 +1,19 @@
 #include "common.hpp"
+#include <sstream>
 
 int AMerge::perform_action_insert() {
 	try {
-		/*Stat status;
+		Stat status;
 		cout << "Action INSERT selected" << endl;
 		cout << "Scanning directories ..." << flush;
 		foreach(std::string directory, _directories){
 			scan_directory(status, directory);
 		}
 		cout << "done" << endl;
-		cout << "Scanned " << status.num_files << " files in " << status.num_dirs << " directories" << endl;
+		cout << "Scanned " << status.get_num_files() << " files in " << status.get_num_dirs() << " directories" << endl;
 
 		cout << "Sorting lexicographically ..." << flush;
-		std::sort( status.paths.begin(), status.paths.end() );
+		std::sort( status.begin(), status.end() );
 		cout << "done" << endl;
 
 		cout << "Checking output directory ..." << flush;
@@ -21,9 +22,22 @@ int AMerge::perform_action_insert() {
 		}
 		cout << "done" << endl;
 
+		cout << "Looking for last used number ..." << flush;
+		{
+			Stat temp;
+			scan_directory(temp, _out_dir, SCAN_MODE_FILES); // Warning: not tracked files may be overwritten
+			std::sort( temp.begin(), temp.end() );
+			Stat::iterator it = temp.end();
+			it--;
+			std::stringstream stream;
+			stream << fs::basename(*it);
+			stream >> _start_number;
+		}
+		cout << "done" << endl;
+
 		cout << "Beginning insert ..." << flush;
 		copy_and_rename( status, _out_dir, _start_number );
-		cout << "done" << endl;*/
+		cout << "done" << endl;
 
 	} catch (fs::filesystem_error) {
 		cout << "failed" << endl;
