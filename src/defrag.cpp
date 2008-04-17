@@ -17,42 +17,31 @@ void remove_directories( fs::path dir ) {
 }
 
 int AMerge::perform_action_defrag() {
-	try {
-		cout << "Action DEFRAG selected" << endl;
-		bool inplace = (!_out_dir.empty() && _directories.size() == 1) ?  false : true ;
+	cout << "Action DEFRAG selected" << endl;
+	bool inplace = (!_out_dir.empty() && _directories.size() == 1) ?  false : true ;
 
-		foreach( fs::path dir, _directories ) {
-			Stat status;
-			_out_dir = inplace ? (dir / ".amerge") : _out_dir;
-			
-			cout << "Scanning directory " << dir << " ..." << flush;
-			status.scan_directory( dir );
-			cout << "Scanned " << status.get_num_files() << " files in " << status.get_num_dirs() << " directories" << endl;
-			
-			cout << "Sorting lexicographically ..." << flush;
-			status.sort();
-			
-			cout << "Check, Clean and Create temporary directory ..." << flush;
-			check_directory( _out_dir, (inplace ? (CHECK_CLEAR | CHECK_CREATE) : CHECK_CREATE) );			
-			
-			cout << "Rename files ..." << flush;
-			status.renumber( _out_dir, _start_number, (inplace ? MOVE : COPY) );
-			
-			if( inplace ) {
-				cout << "Cleaning up ..." << flush;
-				move( _out_dir, dir );
-				remove_directories( dir );
-			}
+	foreach( fs::path dir, _directories ) {
+		Stat status;
+		_out_dir = inplace ? (dir / ".amerge") : _out_dir;
+		
+		cout << "Scanning directory " << dir << " ..." << flush;
+		status.scan_directory( dir );
+		cout << "Scanned " << status.get_num_files() << " files in " << status.get_num_dirs() << " directories" << endl;
+		
+		cout << "Sorting lexicographically ..." << flush;
+		status.sort();
+		
+		cout << "Check, Clean and Create temporary directory ..." << flush;
+		check_directory( _out_dir, (inplace ? (CHECK_CLEAR | CHECK_CREATE) : CHECK_CREATE) );			
+		
+		cout << "Rename files ..." << flush;
+		status.renumber( _out_dir, _start_number, (inplace ? MOVE : COPY) );
+		
+		if( inplace ) {
+			cout << "Cleaning up ..." << flush;
+			move( _out_dir, dir );
+			remove_directories( dir );
 		}
-	} catch(fs::filesystem_error) {
-		cout << "failed" << endl;
-		cout << "A filesystem operation has failed" << endl 
-			<< "Please check whether you have sufficient rights" << endl;
-		return 1;
-	} catch(std::bad_alloc) {
-		// Bad ... very bad
-		std::cerr << "Out of Memory" << std::endl;
-		return 1;
 	}
 	return 0;
 }
