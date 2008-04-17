@@ -19,6 +19,7 @@ int main(int argc, char **argv) {
 		("input-dir,i", po::value< std::vector<std::string> >(&dirs), "specify directories to work on")
 		("output-dir,o", po::value< std::string >(&out_dir), "specify output directory")
 		("action,a", po::value< std::string >(&action), "can be create or defrag at the moment")
+		("clear-src,c", "removes source files when action is completed")
 	;
 	po::positional_options_description p;
 	p.add("input-dir", -1);
@@ -27,6 +28,10 @@ int main(int argc, char **argv) {
 	po::store( po::command_line_parser(argc, argv).options(desc).positional(p).run(), vm );
 	po::notify(vm);
 
+	AMerge app( dirs );
+	app.set_start_number( start_number );
+	app.set_output_directory( out_dir );
+
 	if( vm.count("help") ) {
 		std::cout << desc;
 		return 0;
@@ -34,27 +39,9 @@ int main(int argc, char **argv) {
 		std::cout << "You need to specify an action" << std::endl;
 		std::cout << desc;
 		return 1;
+	} else if( vm.count("clear-src") ) {
+		app.set_auto_clear_src( true );	
 	}
 
-	AMerge app( dirs );
-	app.set_start_number( start_number );
-	app.set_output_directory( out_dir );
-
-	std::cout << action << std::endl;
-	if( action == "create" ) {
-		return app.perform_action( CREATE );
-	} else if( action == "defrag" ) {
-		return app.perform_action( DEFRAG );
-	} else if( action == "unique" ) {
-		return app.perform_action( UNIQUE );
-	} else if( action == "insert" ) {
-		return app.perform_action( INSERT );
-	} else if( action == "unique_defrag" ) {
-		return (app.perform_action( UNIQUE ) || app.perform_action( DEFRAG )) ? 1 : 0;
-	}
-
-
-
-	std::cout << "Unknown action" << std::endl;
-	return 1;
+	return app.perform_action( action );
 }

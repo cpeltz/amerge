@@ -7,7 +7,7 @@ int AMerge::perform_action_insert() {
 		cout << "Action INSERT selected" << endl;
 		cout << "Scanning directories ..." << flush;
 		foreach(std::string directory, _directories){
-			scan_directory(status, directory);
+			status.scan_directory( directory );
 		}
 		cout << "Scanned " << status.get_num_files() << " files in " << status.get_num_dirs() << " directories" << endl;
 
@@ -22,7 +22,7 @@ int AMerge::perform_action_insert() {
 		cout << "Looking for last used number ..." << flush;
 		{
 			Stat temp;
-			scan_directory(temp, _out_dir, SCAN_MODE_FILES); // Warning: not tracked files may be overwritten
+			temp.scan_directory( _out_dir, SCAN_MODE_FILES ); // Warning: not tracked files may be overwritten
 			std::sort( temp.begin(), temp.end() );
 			Stat::iterator it = temp.end();
 			it--;
@@ -33,7 +33,8 @@ int AMerge::perform_action_insert() {
 		}
 
 		cout << "Beginning insert ..." << _start_number << flush;
-		renumber( status, _out_dir, _start_number, COPY );
+		status.renumber( _out_dir, _start_number, (_auto_clear_src ? MOVE : COPY) );
+		_auto_clear_src = false;
 
 	} catch (fs::filesystem_error exc) {
 		cout << "failed" << endl;

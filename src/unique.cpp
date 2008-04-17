@@ -2,18 +2,8 @@
 #include <map>
 #include <list>
 #include <boost/crc.hpp>
-#include <functional>
 #include <boost/integer.hpp>
 
-//typedef std::pair< fs::path, boost::uint_t<32>::fast > pair_type;
-
-/*class marked_for_deletion : public std::unary_function<pair_type, bool > {
- public:
-	result_type operator()(argument_type i) { 
-		return i.second == 0 ? true : false;
-	}
-};*/
-		  
 class CRCTable : public Stat {
 	std::map< fs::path, boost::uint_t<32>::fast > table;
 
@@ -47,7 +37,7 @@ class CRCTable : public Stat {
 				}
 			}
 		}
-		//std::remove_if( table.begin(), table.end(), marked_for_deletion() );
+
 		unsigned int deleted = 0;
 		for( std::map< fs::path, boost::uint_t<32>::fast >::iterator it = table.begin(); it != table.end(); it++ ) {
 			if( it->second == 0 ) {
@@ -66,7 +56,7 @@ int AMerge::perform_action_unique() {
 		cout << "Action UNIQUE selected" << endl;
 		cout << "Scanning directories ..." << flush;
 		foreach(std::string directory, _directories){
-			scan_directory(status, directory);
+			status.scan_directory( directory );
 		}
 		cout << "Scanned " << status.get_num_files() << " files in " << status.get_num_dirs() << " directories" << endl;
 

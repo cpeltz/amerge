@@ -15,6 +15,19 @@ using std::cout;
 using std::endl;
 using std::flush;
 
+//1 = scan recursively
+//2 = add files
+//4 = add dirs
+//8 = ignore file extensions
+typedef enum FLAGS {	SCAN_MODE_RECURSIVE = 1, 
+						SCAN_MODE_FILES = 2,
+						SCAN_MODE_DIRS = 4,
+						SCAN_MODE_NOEXTENSION = 8,
+						CHECK_CREATE = 1,
+						CHECK_CLEAR = 2,
+						COPY = 1, //for renumber()
+						MOVE = 2};//for renumber()
+
 class Stat {
 	int num_files;
 	int num_dirs;
@@ -55,35 +68,23 @@ class Stat {
 		num_files++;
 	}
 
-	virtual int get_num_files() {
+	virtual int get_num_files() const {
 		return num_files;
 	}
 
-	virtual int get_num_dirs() {
+	virtual int get_num_dirs() const {
 		return num_dirs;
 	}
 
 	virtual void sort() {
 		std::sort( paths.begin(), paths.end() );
 	}
+
+	virtual void remove() const ;
+	virtual void scan_directory( const fs::path &directory, int flags = SCAN_MODE_RECURSIVE | SCAN_MODE_FILES );
+	virtual void renumber( const fs::path &out_dir, int start_number, int flags ) const;
 };
 
-//1 = scan recursively
-//2 = add files
-//4 = add dirs
-//8 = ignore file extensions
-typedef enum FLAGS {	SCAN_MODE_RECURSIVE = 1, 
-						SCAN_MODE_FILES = 2,
-						SCAN_MODE_DIRS = 4,
-						SCAN_MODE_NOEXTENSION = 8,
-						CHECK_CREATE = 1,
-						CHECK_CLEAR = 2,
-						COPY = 1, //for rename()
-						MOVE = 2};//for rename()
-
-void renumber( const Stat &status, const fs::path &out_dir, int start_number, int flags );
-void scan_directory( Stat &status, const fs::path &directory, int flags = SCAN_MODE_RECURSIVE | SCAN_MODE_FILES );
 int check_directory( const fs::path &dir, int flags );
-void remove( const Stat &status );
 
 #endif

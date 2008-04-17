@@ -20,7 +20,7 @@ bool has_valid_extension( const fs::path &path ) {
 	return false;
 }
 
-void scan_directory( Stat &status, const fs::path &directory, int flags ) { 
+void Stat::scan_directory( const fs::path &directory, int flags ) { 
 	if( !fs::exists( directory ) ) {
 		std::cerr << "ERROR: Directory " << directory << " does not exist!" << endl;
 		return;
@@ -28,25 +28,24 @@ void scan_directory( Stat &status, const fs::path &directory, int flags ) {
 	fs::directory_iterator dir_iter( directory ), end_iter;
 	for( ; dir_iter != end_iter; dir_iter++ ){
 		if( fs::is_directory(dir_iter->path()) ) {
-			status.inc_dirs();
+			inc_dirs();
 			if( flags & SCAN_MODE_RECURSIVE ) {
-				scan_directory( status, dir_iter->path() );
+				scan_directory( dir_iter->path() );
 			}
 			if( flags & SCAN_MODE_DIRS ) {
-				status.add( dir_iter->path() );
+				add( dir_iter->path() );
 			}
 		} else if( fs::is_regular(dir_iter->path()) && (has_valid_extension(dir_iter->path()) || (SCAN_MODE_NOEXTENSION & flags)) ) {
-			status.inc_files();
+			inc_files();
 			if( flags & SCAN_MODE_FILES ) {
-				status.add( dir_iter->path() );
+				add( dir_iter->path() );
 			}
 		}
 	}
 }
-
-void renumber( const Stat &status, const fs::path &out_dir, int start_number, int flags ) {
+void Stat::renumber( const fs::path &out_dir, int start_number, int flags ) const {
 	std::string extension, number_str;
-	foreach( fs::path src, status ) {
+	foreach( fs::path src, *this ) {
 		std::stringstream sstream;
 		sstream.fill( '0' );
 		sstream.width( 5 );
@@ -64,7 +63,6 @@ void renumber( const Stat &status, const fs::path &out_dir, int start_number, in
 		if( chmod( dest.file_string().c_str(), S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH ) ) { // non-fatal permission error
 			std::cerr << "ERROR: Could not set permissions for " << dest << endl;
 		}
-//		cout << src << ", " << dest  << ";" << endl; // for debugging purposes
 		start_number++;
 	}
 }
@@ -82,10 +80,10 @@ int check_directory( const fs::path &dir, int flags ) {
 		}
 	} else if( flags & CHECK_CLEAR ) {
 		Stat stat;
-		scan_directory( stat, dir , SCAN_MODE_RECURSIVE | SCAN_MODE_DIRS | SCAN_MODE_FILES );
+		stat.scan_directory( dir , SCAN_MODE_RECURSIVE | SCAN_MODE_DIRS | SCAN_MODE_FILES );
 		stat.add( dir );
 		std::sort( stat.begin(), stat.end() );
-		remove( stat );
+		stat.remove();
 	} else if( !fs::is_directory(dir) ) {
 		std::cerr << "ERROR: " << dir << " is not a directory" << endl;
 		return 1;
@@ -101,8 +99,8 @@ int check_directory( const fs::path &dir, int flags ) {
 	return 0;
 }
 
-void remove( const Stat &status ) {
-	foreach( fs::path entry, status ) {
+void Stat::remove() const {
+	foreach( fs::path entry, *this ) {
 		fs::remove( entry );
 	}
 }

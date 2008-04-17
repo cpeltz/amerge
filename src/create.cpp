@@ -6,7 +6,7 @@ int AMerge::perform_action_create() {
 		cout << "Action CREATE selected" << endl;
 		cout << "Scanning directories ..." << flush;
 		foreach(std::string directory, _directories){
-			scan_directory(status, directory);
+			status.scan_directory( directory );
 		}
 		cout << "Scanned " << status.get_num_files() << " files in " << status.get_num_dirs() << " directories" << endl;
 
@@ -20,7 +20,7 @@ int AMerge::perform_action_create() {
 
 		cout << "Beginning create ..." << flush;
 		// TODO Fortschrittsbalken
-		renumber( status, _out_dir, _start_number, COPY );
+		status.renumber( _out_dir, _start_number, COPY );
 
 	} catch (fs::filesystem_error) {
 		cout << "failed" << endl;

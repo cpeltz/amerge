@@ -2,7 +2,7 @@
 
 void move( fs::path src, fs::path dest ) {
 	Stat status;
-	scan_directory( status, src, SCAN_MODE_FILES );
+	status.scan_directory( src, SCAN_MODE_FILES );
 	foreach( fs::path file, status ) {
 		fs::rename( file, dest / file.leaf() );
 	}
@@ -10,10 +10,10 @@ void move( fs::path src, fs::path dest ) {
 
 void remove_directories( fs::path dir ) {
 	Stat status;
-	scan_directory( status, dir, SCAN_MODE_DIRS | SCAN_MODE_RECURSIVE );
+	status.scan_directory( dir, SCAN_MODE_DIRS | SCAN_MODE_RECURSIVE );
 	std::sort( status.begin(), status.end() );
 	std::reverse( status.begin(), status.end() );
-	remove( status );
+	status.remove();
 }
 
 int AMerge::perform_action_defrag() {
@@ -26,7 +26,7 @@ int AMerge::perform_action_defrag() {
 			_out_dir = inplace ? (dir / ".amerge") : _out_dir;
 			
 			cout << "Scanning directory " << dir << " ..." << flush;
-			scan_directory( status, dir );
+			status.scan_directory( dir );
 			cout << "Scanned " << status.get_num_files() << " files in " << status.get_num_dirs() << " directories" << endl;
 			
 			cout << "Sorting lexicographically ..." << flush;
@@ -36,12 +36,7 @@ int AMerge::perform_action_defrag() {
 			check_directory( _out_dir, (inplace ? (CHECK_CLEAR | CHECK_CREATE) : CHECK_CREATE) );			
 			
 			cout << "Rename files ..." << flush;
-			renumber( status, _out_dir, _start_number, (inplace ? MOVE : COPY) );
-			
-			if( inplace || _auto_clear_src ) {
-				cout << "Remove old files ..." << flush;
-				remove( status ) ;
-			}
+			status.renumber( _out_dir, _start_number, (inplace ? MOVE : COPY) );
 			
 			if( inplace ) {
 				cout << "Cleaning up ..." << flush;
