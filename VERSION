@@ -1,4 +1,4 @@
-Current Version: 0.6
+Current Version: 0.7
 
 Milestones
 
@@ -25,7 +25,7 @@ new action: insert ( adds contents of a new dir to a already created dir )
 
 0.7
 flag for auto-remove-src-dir
-make defrag and unique optional out of place
+make defrag optional out of place
 
 0.8 (second maids release)
 Code cleanup/rewrite
