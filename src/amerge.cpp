@@ -28,24 +28,24 @@ int AMerge::perform_action( const std::string &action ) {
 				std::cerr << "You need to specify a output directory and one or more input directories" << endl;
 		} else if( action == "defrag" ) {
 			if( _out_dir.empty() && _directories.size() == 1 && _auto_clear_src ) {
-				cout << "clear-src flag ignored, because no output directory was specified" << endl;
+				std::cerr << "clear-src flag ignored, because no output directory was specified" << endl;
 				_auto_clear_src = false;
 			}
 
 			if( !_directories.empty() )
 				return_value = perform_action_defrag();
 			else
-				cout << "You need to specify at least one input directory" << endl;
+				std::cerr << "You need to specify at least one input directory" << endl;
 		} else if( action == "unique" ) {
 			if( _auto_clear_src ) {
-				cout << "clear-src flag ignored, action does not allow it" << endl;
+				std::cerr << "clear-src flag ignored, action does not allow it" << endl;
 				_auto_clear_src = false;
 			}
 
 			if( !_directories.empty() )
 				return_value = perform_action_unique();
 			else
-				cout << "You need to specify at least one input directory" << endl;
+				std::cerr << "You need to specify at least one input directory" << endl;
 		} else if( action == "insert" ) {
 			if( _out_dir.empty() || _directories.empty())
 				std::cerr << "You need to specify a output directory and one or more input directories" << endl;
@@ -59,10 +59,13 @@ int AMerge::perform_action( const std::string &action ) {
 			this->clear_src();
 		}
 
-	} catch (fs::filesystem_error) {
-		cout << "failed" << endl;
-		cout << "A filesystem operation has failed" << endl 
-			<< "Please check whether you have sufficient rights" << endl;
+	} catch (fs::basic_filesystem_error<fs::path> error) {
+		std::cerr << "failed" << endl;
+		std::cerr << "A filesystem operation has failed" << endl 
+			<< "Please check whether you have sufficient rights" << endl
+			<< "What : " << error.what() << endl
+			<< "Path1: " << error.path1() << endl
+			<< "Path2: " << error.path2() << endl;
 		return 1;
 	} catch(std::bad_alloc) {
 		// Bad ... very bad
