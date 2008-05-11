@@ -20,17 +20,15 @@ bool has_valid_extension( const fs::path &path ) {
 	return false;
 }
 
-void Stat::scan_directory( const fs::path &directory, int flags ) { 
+void Stat::scan_directory( const fs::path &directory, int flags ) throw(RuntimeError) { 
 	if( !fs::exists( directory ) ) {
-		std::cerr << "ERROR: Directory " << directory << " does not exist!" << endl;
-		return;
+		throw new RuntimeError("Directory " + directory.string() + " does not exist!" );
 	}
-	fs::directory_iterator dir_iter( directory ), end_iter;
-	for( ; dir_iter != end_iter; dir_iter++ ){
+	for( fs::directory_iterator dir_iter( directory ), end_iter; dir_iter != end_iter; dir_iter++ ) {
 		if( fs::is_directory(dir_iter->path()) ) {
 			inc_dirs();
 			if( flags & SCAN_MODE_RECURSIVE ) {
-				scan_directory( dir_iter->path() );
+				scan_directory( dir_iter->path(), flags );
 			}
 			if( flags & SCAN_MODE_DIRS ) {
 				add( dir_iter->path() );
@@ -69,11 +67,10 @@ void Stat::renumber( const fs::path &out_dir, int start_number, int flags ) cons
 
 int check_directory( const fs::path &dir, int flags ) {
 	// Check whether the directory exists, is a directory, is empty and we have the proper rights
-	fs::ofstream out;
-	out.open( dir / "test" );	
 	if( !fs::exists(dir) ) {
 		if( flags & CHECK_CREATE ) {
 			fs::create_directory(dir); 
+			return 0;
 		} else {
 			std::cerr << "ERROR: " << dir << " does not exist" << endl;
 			return 1;
@@ -81,8 +78,7 @@ int check_directory( const fs::path &dir, int flags ) {
 	} else if( flags & CHECK_CLEAR ) {
 		Stat stat;
 		stat.scan_directory( dir , SCAN_MODE_RECURSIVE | SCAN_MODE_DIRS | SCAN_MODE_FILES );
-		stat.add( dir );
-		std::sort( stat.begin(), stat.end() );
+		stat.sort();
 		stat.remove();
 	} else if( !fs::is_directory(dir) ) {
 		std::cerr << "ERROR: " << dir << " is not a directory" << endl;
@@ -90,12 +86,16 @@ int check_directory( const fs::path &dir, int flags ) {
 	} else if( !fs::is_empty(dir) ) {
 		std::cerr << "ERROR: " << dir << " is not empty" << endl;
 		return 1;
-	} else if( !out.is_open() ) {
-		std::cerr << "ERROR: We do not have proper rights for " << dir << endl;
-		return 1;
+	} else {
+		fs::ofstream out;
+		out.open( dir / "test" );	
+		if( !out.is_open() ) {
+			std::cerr << "ERROR: We do not have proper rights for " << dir << endl;
+			return 1;
+		}
+		out.close();
+		fs::remove( dir / "test" ); 
 	}
-	out.close();
-	fs::remove( dir / "test" ); 
 	return 0;
 }
 

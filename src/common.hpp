@@ -8,12 +8,25 @@
 #include <cctype>
 #include <algorithm>
 #include <sstream>
+#include <exception>
 
 #define foreach BOOST_FOREACH
 
 using std::cout;
 using std::endl;
 using std::flush;
+
+class RuntimeError : public std::exception {
+	std::string reason;
+
+ public:
+ 	RuntimeError( std::string _reason = "" ) : reason(_reason) {}
+	virtual ~RuntimeError() throw() {}
+    virtual const char* what() const throw(){
+		return reason.c_str();
+	}
+
+};
 
 //1 = scan recursively
 //2 = add files
@@ -81,8 +94,17 @@ class Stat {
 	}
 
 	virtual void remove() const ;
-	virtual void scan_directory( const fs::path &directory, int flags = SCAN_MODE_RECURSIVE | SCAN_MODE_FILES );
+	virtual void scan_directory( const fs::path &directory, int flags = SCAN_MODE_RECURSIVE | SCAN_MODE_FILES ) throw(RuntimeError);
 	virtual void renumber( const fs::path &out_dir, int start_number, int flags ) const;
+	virtual void clear() {
+		num_dirs = 0;
+		num_files = 0;
+		paths.clear();
+	}
+
+	virtual std::size_t size() const {
+		return paths.size();
+	}
 };
 
 int check_directory( const fs::path &dir, int flags );
