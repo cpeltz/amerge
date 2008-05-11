@@ -1,3 +1,0 @@
-add_executable(amerge main.cpp amerge.cpp common.cpp create.cpp defrag.cpp
-	unique.cpp insert.cpp)
-target_link_libraries(amerge boost_filesystem boost_program_options)
