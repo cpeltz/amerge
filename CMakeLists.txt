@@ -12,10 +12,17 @@ file(GLOB SRC_FILES src/*.cpp)
 add_executable(amerge ${SRC_FILES})
 target_link_libraries(amerge ${Boost_Libs})
 
-file(GLOB SRC_FILES test/*.cpp)
-add_executable(common_test ${SRC_FILES})
+add_executable(common_test test/common_test.cpp)
 target_link_libraries(common_test ${Boost_Test_Libs})
+
+add_executable(defrag_test test/defrag_test.cpp)
+target_link_libraries(defrag_test ${Boost_Test_Libs})
+
+add_executable(unique_test test/unique_test.cpp)
+target_link_libraries(unique_test ${Boost_Test_Libs})
 
 enable_testing()
 
 add_test(common_test ${EXECUTABLE_OUTPUT_PATH}/common_test)
+add_test(defrag_test ${EXECUTABLE_OUTPUT_PATH}/defrag_test)
+add_test(unique_test ${EXECUTABLE_OUTPUT_PATH}/unique_test)
