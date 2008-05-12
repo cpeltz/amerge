@@ -1,0 +1,38 @@
+This is the User-Documentation for AMerge.
+
+What is AMerge?
+AMerge is a small c++ program, written to manage big archives of images to
+which names ar not relevant (because amerge will rename them and number them).
+
+How to invoke AMerge?
+Simply type
+> amerge -a action indir1 indir2 ... indirN
+but beware, not all options are compatible with all actions.
+
+What is an Action?
+An Action is simply a behaviour for AMerge, a Task to be done. As of the time
+of this writing, there are four actions: create, defrag, insert and unique.
+
+create needs a output directory (-o) and one or more input directories.
+Optionally you can set the number from where to start numbering (-s) and you
+can tell amerge to remove the source files after the work is done (-c).
+
+defrag is usually invoked to close the gaps in the numbering scheme opened by
+the action unique. It takes one or more input directories but no output
+directory and the flag -c is ignored.
+
+insert inserts the contents of one or more input directories into the
+specified output directory. The special thing is, that insert expects a
+already created directory (with action create) at output directory and that it
+will determine automatically from where to start numbering, therefor is the
+option -s ignored, but -c can still be used to remove the input directories
+after the insert.
+
+unique removes all duplicated files in the input_directories. It does not take
+a output directory as parameter and the -s and -c parameters are without
+effect.
+
+What files can amerge manage?
+amerge uses a hardcoded (at the moment at least) array to define filename
+extensions, which are processed (as this program is aimed for image archives,
+it will only find the most used extensions valid).
