@@ -28,6 +28,10 @@ target_link_libraries(action_test ${Boost_Test_Libs})
 add_custom_target(tests)
 add_dependencies(tests common_test defrag_test unique_test action_test)
 
+add_custom_target(docs doxygen ${CMAKE_CURRENT_SOURCE_DIR}/doc/doxyfile VERBATIM)
+add_custom_command(TARGET docs PRE_BUILD COMMAND ${CMAKE_COMMAND} -E
+	make_directory ${CMAKE_CURRENT_BINARY_DIR}/doc )
+
 enable_testing()
 
 add_test(common_test ${EXECUTABLE_OUTPUT_PATH}/common_test)
