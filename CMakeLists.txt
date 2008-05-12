@@ -38,3 +38,5 @@ add_test(common_test ${EXECUTABLE_OUTPUT_PATH}/common_test)
 add_test(defrag_test ${EXECUTABLE_OUTPUT_PATH}/defrag_test)
 add_test(unique_test ${EXECUTABLE_OUTPUT_PATH}/unique_test)
 add_test(action_test ${EXECUTABLE_OUTPUT_PATH}/action_test)
+
+install(TARGETS amerge RUNTIME DESTINATION bin)
