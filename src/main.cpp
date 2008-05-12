@@ -6,6 +6,10 @@
 
 #include "amerge.hpp"
 
+const unsigned int VERSION_MAJOR = 1;
+const unsigned int VERSION_MINOR = 0;
+const unsigned int VERSION_PATCH = 1;
+
 namespace po = boost::program_options;
 
 int main(int argc, char **argv) {
@@ -15,6 +19,7 @@ int main(int argc, char **argv) {
 	po::options_description desc("Allowed options");
 	desc.add_options()
 		("help,h", "produce help message")
+		("version", "print version information")
 		("start-number,s", po::value<int>(&start_number)->default_value(0), "start numbering files from this offset on")
 		("input-dir,i", po::value< std::vector<std::string> >(&dirs), "specify directories to work on")
 		("output-dir,o", po::value< std::string >(&out_dir), "specify output directory")
@@ -34,6 +39,9 @@ int main(int argc, char **argv) {
 
 	if( vm.count("help") ) {
 		std::cout << desc;
+		return 0;
+	} else if( vm.count("version") ) {
+		std::cout << VERSION_MAJOR << "." << VERSION_MINOR << "." << VERSION_PATCH << std::endl;
 		return 0;
 	} else if( !vm.count("action") ) {
 		std::cout << "You need to specify an action" << std::endl;
