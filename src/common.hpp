@@ -38,6 +38,7 @@ typedef enum FLAGS {	SCAN_MODE_RECURSIVE = 1,
 						SCAN_MODE_NOEXTENSION = 8,
 						CHECK_CREATE = 1,
 						CHECK_CLEAR = 2,
+						CHECK_IGNORE_EMPTY = 4,
 						COPY = 1, //for renumber()
 						MOVE = 2};//for renumber()
 

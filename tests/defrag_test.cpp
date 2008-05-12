@@ -1,8 +1,9 @@
-#include "../src/common.cpp"
-#include "../src/defrag.cpp"
+#include "../src/common.hpp"
 #define BOOST_AUTO_TEST_MAIN
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
+
+void move( fs::path src, fs::path dest );
 
 BOOST_AUTO_TEST_CASE( test_move ) {
 	fs::create_directory(".test");

@@ -9,7 +9,7 @@ void AMerge::set_start_number( int start_number ) {
 	_start_number = start_number;
 }
 
-void AMerge::set_output_directory( std::string &out_dir ) {
+void AMerge::set_output_directory( const std::string &out_dir ) {
 	_out_dir = out_dir;
 }
 
@@ -71,6 +71,10 @@ int AMerge::perform_action( const std::string &action ) {
 		// Bad ... very bad
 		std::cerr << "Out of Memory" << std::endl;
 		return 1;
+	} catch(std::exception *error) {
+		std::cerr << "failed" << endl;
+		std::cerr << "A RuntimeError occured"<< endl
+			<< "What: " << error->what() << endl;
 	}
 
 	return return_value;

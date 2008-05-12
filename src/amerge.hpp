@@ -30,7 +30,7 @@ class AMerge {
 	~AMerge();
 	
 	void set_start_number( int start_number );
-	void set_output_directory( std::string &out_dir );
+	void set_output_directory( const std::string &out_dir );
 	void set_auto_clear_src( bool auto_clear_src );
 
 	int perform_action( const std::string &action );

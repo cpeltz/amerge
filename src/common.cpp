@@ -83,7 +83,7 @@ int check_directory( const fs::path &dir, int flags ) {
 	} else if( !fs::is_directory(dir) ) {
 		std::cerr << "ERROR: " << dir << " is not a directory" << endl;
 		return 1;
-	} else if( !fs::is_empty(dir) ) {
+	} else if( !fs::is_empty(dir) && !(flags & CHECK_IGNORE_EMPTY) ) {
 		std::cerr << "ERROR: " << dir << " is not empty" << endl;
 		return 1;
 	} else {

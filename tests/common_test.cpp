@@ -1,8 +1,11 @@
-#include "../src/common.cpp"
-#include "../src/defrag.cpp"
+#include "../src/common.hpp"
 #define BOOST_AUTO_TEST_MAIN
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
+
+char _lower( char ch );
+void to_lower( std::string &str );
+void remove_directories( fs::path dir );
 
 BOOST_AUTO_TEST_CASE( test__lower ) {
 	char a = 'A';

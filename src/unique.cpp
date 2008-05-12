@@ -53,19 +53,19 @@ class CRCTable : public Stat {
 int AMerge::perform_action_unique() {
 	CRCTable status;
 	cout << "Action UNIQUE selected" << endl;
-	cout << "Scanning directories ..." << flush;
+	cout << "Scanning directories ..." << endl;
 	foreach(std::string directory, _directories){
 		status.scan_directory( directory );
 	}
 	cout << "Scanned " << status.get_num_files() << " files in " << status.get_num_dirs() << " directories" << endl;
 
-	cout << "Sorting lexicographically ..." << flush;
+	cout << "Sorting lexicographically ..." << endl;
 	status.sort();
 
-	cout << "Create CRC-Table ..." << flush;
+	cout << "Create CRC-Table ..." << endl;
 	status.create_crc();
 
-	cout << "Find and remove duplicated entrys ..." << flush;
+	cout << "Find and remove duplicated entrys ..." << endl;
 	unsigned int deleted = status.unique();
 	cout << "Removed " << deleted << " files" << endl;
 
