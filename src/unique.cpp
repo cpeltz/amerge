@@ -4,17 +4,35 @@
 #include <boost/crc.hpp>
 #include <boost/integer.hpp>
 
+/**
+ * CRCTable extends Stat with the ability to compute CRC32 Checksums.
+ */
 class CRCTable : public Stat {
+	/**
+	 * The additional table with a path->CRC32 relation
+	 */
 	std::map< fs::path, boost::uint_t<32>::fast > table;
 
  public:
+ 	/**
+	 * Destructor
+	 */
 	virtual ~CRCTable(){}
 
+	/**
+	 * Overwritten add methode to acknowledge the existence of table.
+	 *
+	 * @param path The Path to be added
+	 */
 	void add( const fs::path &path ) {
 		Stat::add( path );
 		table.insert( std::make_pair( path, 0) );
 	}
 	
+	/**
+	 * This function creates for every path saved in table the correct CRC Checksum
+	 * @return void
+	 */
 	void create_crc() {
 		for( std::map< fs::path, boost::uint_t<32>::fast >::iterator it = table.begin(); it != table.end(); it++ ) {
 			fs::ifstream in( it->first );
@@ -26,6 +44,10 @@ class CRCTable : public Stat {
 		}
 	}
 
+	/**
+	 * This function removes all duplicates.
+	 * @return unsigned int The number of removed files.
+	 */
 	unsigned int unique() {
 		for( std::map< fs::path, boost::uint_t<32>::fast >::iterator it = table.begin(); it != table.end(); it++ ) {
 			if( it->second == 0 )

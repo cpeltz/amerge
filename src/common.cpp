@@ -1,14 +1,30 @@
 #include "common.hpp"
 #include <sys/stat.h>
 
+/**
+ * Helper function for to_lower
+ * @param ch The character which should be converted to lowercase.
+ * @return char The lowercase version of ch
+ */
 char _lower( char ch ) {
 	return static_cast<char>( std::tolower( (int) ch ) );
 }
 
+/**
+ * Converts a string directly to lowercase.
+ *
+ * @param str The string, which will be transformed to lowercase.
+ * @return void
+ */
 void to_lower( std::string &str ) {
 	std::transform( str.begin(), str.end(), str.begin(), _lower );
 }
 
+/**
+ * Helperfunction for Stat::scan_directory. Checks whether or not the path has a valid extension (only files should be used)
+ * @param path A Path to a file to be checked
+ * @return bool TRUE if the File has a valid extension, FALSE otherwise
+ */
 bool has_valid_extension( const fs::path &path ) {
 	std::string ending = fs::extension( path );
 	to_lower( ending );
