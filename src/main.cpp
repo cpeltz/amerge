@@ -8,7 +8,7 @@
 
 const unsigned int VERSION_MAJOR = 1;
 const unsigned int VERSION_MINOR = 0;
-const unsigned int VERSION_PATCH = 1;
+const unsigned int VERSION_PATCH = 2;
 
 namespace po = boost::program_options;
 
