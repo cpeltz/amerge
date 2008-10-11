@@ -36,7 +36,7 @@ bool has_valid_extension( const fs::path &path ) {
 	return false;
 }
 
-void Stat::scan_directory( const fs::path &directory, int flags ) throw(RuntimeError) { 
+void Stat::scan_directory( const fs::path &directory, int flags ) throw(RuntimeError*) {
 	if( !fs::exists( directory ) ) {
 		throw new RuntimeError("Directory " + directory.string() + " does not exist!" );
 	}

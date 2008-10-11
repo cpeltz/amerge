@@ -186,7 +186,7 @@ class Stat {
 	 * @param flags Flags for manipulating the behaviour. Can be a combination from SCAN_MODE_FILES, SCAN_MODE_DIRS, SCAN_MODE_RECURSIVE and SCAN_MODE_NOEXTENSION
 	 * @return void
 	 */
-	virtual void scan_directory( const fs::path &directory, int flags = SCAN_MODE_RECURSIVE | SCAN_MODE_FILES ) throw(RuntimeError);
+	virtual void scan_directory( const fs::path &directory, int flags = SCAN_MODE_RECURSIVE | SCAN_MODE_FILES ) throw(RuntimeError*);
 	/**
 	 * @brief This function takes all files in the path container and rename them and puts them into out_dir
 	 *

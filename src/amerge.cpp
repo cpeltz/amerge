@@ -75,6 +75,7 @@ int AMerge::perform_action( const std::string &action ) {
 		std::cerr << "failed" << endl;
 		std::cerr << "A RuntimeError occured"<< endl
 			<< "What: " << error->what() << endl;
+		delete error;
 	}
 
 	return return_value;
