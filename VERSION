@@ -47,6 +47,7 @@ i18n (gettext)
 GUI
 watcher mode ( amerge looks into specified dir and every accepted file will be immediatly renamed and copied into the other specified dir )
 automatic sub-dir creation (if there are too much files [config] create sub-dirs, e.g. for files 0 - 3000, for files 3001 - 6000, etc pp
+number order correction (example: files 001 - 999 and then 1001-xxxx, the 001-999 should be befor the others and not in between)
 
 -----Ideas-----
 Hooks
