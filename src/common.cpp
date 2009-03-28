@@ -1,6 +1,33 @@
 #include "common.hpp"
 #include <sys/stat.h>
 
+using std::cerr;
+
+void create_sub_dirs( const fs::path out_dir, const int boundary ) {
+	Stat status;
+	status.scan_directory( out_dir );
+	status.sort();
+	int num_files = status.get_num_files();
+	if( num_files <= boundary ) {
+		return ;
+	}
+	int num_dirs = (num_files / boundary) + 1;
+	int until_boundary_reached = 0;
+	fs::path target_dir;
+	for( Stat::iterator it = status.begin(); it != status.end(); it++ ) {
+		if( !until_boundary_reached ) {
+			fs::path basename = fs::basename(*it);
+			fs::path branch = it->branch_path();
+			target_dir = branch / basename;
+			fs::create_directory( branch / basename );
+			until_boundary_reached = boundary;
+		}
+		fs::copy_file( *it, target_dir / it->leaf() );
+		until_boundary_reached--;
+	}
+	status.remove();
+}
+
 /**
  * Helper function for to_lower
  * @param ch The character which should be converted to lowercase.

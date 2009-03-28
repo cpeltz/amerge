@@ -226,4 +226,12 @@ class Stat {
  */
 int check_directory( const fs::path &dir, int flags );
 
+/**
+ * Create sub-directories in out_dir and move the files created by renumber.
+ *
+ * @param out_dir Output directory
+ * @param boundary Limit for one directory
+ * @return void
+ */
+void create_sub_dirs( const fs::path out_dir, const int boundary );
 #endif

@@ -20,6 +20,10 @@ int AMerge::perform_action_create() {
 	cout << "Beginning create ..." << endl;
 	// TODO Fortschrittsbalken
 	status.renumber( _out_dir, _start_number, COPY );
+	if( _create_sub_dirs ) {
+		cout << "Create sub-directories ..." << endl;
+		create_sub_dirs( _out_dir, _sub_dir_boundary );
+	}
 
 	return 0;
 }

@@ -1,7 +1,7 @@
 #include "common.hpp"
 
 AMerge::AMerge( std::vector< std::string > directories ) 
-	: _directories(directories), _start_number(0), _out_dir(""), _auto_clear_src(false) {}
+	: _directories(directories), _start_number(0), _out_dir(""), _auto_clear_src(false), _sub_dir_boundary(1000), _create_sub_dirs(false) {}
 
 AMerge::~AMerge(){}
 
@@ -15,6 +15,14 @@ void AMerge::set_output_directory( const std::string &out_dir ) {
 
 void AMerge::set_auto_clear_src( bool auto_clear_src ) {
 	_auto_clear_src = auto_clear_src;
+}
+
+void AMerge::set_create_sub_dirs( bool create_sub_dirs ) {
+	_create_sub_dirs = create_sub_dirs;
+}
+
+void AMerge::set_sub_dir_boundary( int sub_dir_boundary ) {
+	_sub_dir_boundary = sub_dir_boundary;
 }
 
 int AMerge::perform_action( const std::string &action ) {

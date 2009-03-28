@@ -31,16 +31,21 @@ int AMerge::perform_action_defrag() {
 		cout << "Sorting lexicographically ..." << endl;
 		status.sort();
 		
-		cout << "Check, Clean and Create temporary directory ..." << endl;
+		cout << "Check, Clean and Create (temporary) directory ..." << endl;
 		check_directory( _out_dir, (inplace ? (CHECK_CLEAR | CHECK_CREATE) : CHECK_CREATE) );			
 		
 		cout << "Rename files ..." << endl;
 		status.renumber( _out_dir, _start_number, (inplace ? MOVE : COPY) );
-		
+
 		if( inplace ) {
 			cout << "Cleaning up ..." << endl;
 			move( _out_dir, dir );
 			remove_directories( dir );
+		}
+
+		if( _create_sub_dirs ) {
+			cout << "Recreate sub-directory structure ..." << endl;
+			create_sub_dirs( inplace ? dir : _out_dir, _sub_dir_boundary );
 		}
 	}
 	return 0;

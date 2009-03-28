@@ -40,6 +40,14 @@ class AMerge {
 	 * Flag for removing the input directories
 	 */
 	bool _auto_clear_src;
+	/**
+	 * Flag for automatical sub-directory creation.
+	 */
+	bool _create_sub_dirs;
+	/**
+	 * Number of files per directory if _create_sub_dirs is true
+	 */
+	int _sub_dir_boundary;
 
 	/**
 	 * @brief Performs the action create.
@@ -104,6 +112,18 @@ class AMerge {
 	 * @return void
 	 */
 	void set_auto_clear_src( bool auto_clear_src );
+	/**
+	 * Sets the flag for automatic sub-directory creation
+	 * @param create_sub_dirs Value for _create_sub_dirs
+	 * @return void
+	 */
+	void set_create_sub_dirs( bool create_sub_dirs );
+	/**
+	 * Sets the number of Files per sub-directory
+	 * @param sub_dir_boundary Number of Files per Directory
+	 * @return void
+	 */
+	void set_sub_dir_boundary( int sub_dir_boundary );
 
 	/**
 	 * Performs a Action that corresponds to the string action.
