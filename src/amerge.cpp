@@ -67,7 +67,7 @@ int AMerge::perform_action( const std::string &action ) {
 			this->clear_src();
 		}
 
-	} catch (fs::basic_filesystem_error<fs::path> error) {
+    } catch (fs::filesystem_error error) {
 		std::cerr << "failed" << endl;
 		std::cerr << "A filesystem operation has failed" << endl 
 			<< "Please check whether you have sufficient rights" << endl

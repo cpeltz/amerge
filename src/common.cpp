@@ -63,7 +63,7 @@ bool has_valid_extension( const fs::path &path ) {
 	return false;
 }
 
-void Stat::scan_directory( const fs::path &directory, int flags ) throw(RuntimeError*) {
+void Stat::scan_directory( const fs::path &directory, int flags ) {
 	if( !fs::exists( directory ) ) {
 		throw new RuntimeError("Directory " + directory.string() + " does not exist!" );
 	}
@@ -101,7 +101,7 @@ void Stat::renumber( const fs::path &out_dir, int start_number, int flags ) cons
 		else if( flags & MOVE )
 			fs::rename( src, dest );
 
-		if( chmod( dest.file_string().c_str(), S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH ) ) { // non-fatal permission error
+        if( chmod( dest.string().c_str(), S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH ) ) { // non-fatal permission error
 			std::cerr << "ERROR: Could not set permissions for " << dest << endl;
 		}
 		start_number++;

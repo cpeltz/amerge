@@ -15,7 +15,7 @@ static const char* extensions[] = {".jpg", ".jpeg", ".gif", ".bmp", ".png", ".ti
 /**
  * enum for actions
  */
-typedef enum Action { CREATE, DEFRAG, UNIQUE, INSERT };
+enum Action { CREATE, DEFRAG, UNIQUE, INSERT };
 
 /**
  * @brief The main application class. Responsible for calling the actions and handle excceptions.

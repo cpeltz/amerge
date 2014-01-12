@@ -36,11 +36,13 @@ class CRCTable : public Stat {
 	void create_crc() {
 		for( std::map< fs::path, boost::uint_t<32>::fast >::iterator it = table.begin(); it != table.end(); it++ ) {
 			fs::ifstream in( it->first );
-			void *buf = new char[file_size( it->first )];
+            uint32_t buffer_size = file_size( it->first );
+            char *buf = new char[buffer_size];
 			in.read( (char *)buf, file_size( it->first ) );
 			boost::crc_32_type crc_computer;
 			crc_computer.process_bytes( buf, file_size(it->first) );
 			it->second = crc_computer();
+            delete[] buf;
 		}
 	}
 
@@ -61,12 +63,13 @@ class CRCTable : public Stat {
 		}
 
 		unsigned int deleted = 0;
-		for( std::map< fs::path, boost::uint_t<32>::fast >::iterator it = table.begin(); it != table.end(); it++ ) {
+        for( std::map< fs::path, boost::uint_t<32>::fast >::iterator it = table.begin(); it != table.end(); ) {
 			if( it->second == 0 ) {
-				table.erase( it );
-				it--;
+                table.erase( it++ );
 				deleted++;
-			}
+            } else {
+                it++;
+            }
 		}
 		return deleted;
 	}

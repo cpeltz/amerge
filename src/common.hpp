@@ -52,15 +52,15 @@ class RuntimeError : public std::exception {
 /**
  * This enum contains all flags for every function.
  */
-typedef enum FLAGS {	SCAN_MODE_RECURSIVE = 1, 
-						SCAN_MODE_FILES = 2,
-						SCAN_MODE_DIRS = 4,
-						SCAN_MODE_NOEXTENSION = 8,
-						CHECK_CREATE = 1,
-						CHECK_CLEAR = 2,
-						CHECK_IGNORE_EMPTY = 4,
-						COPY = 1, //for renumber()
-						MOVE = 2};//for renumber()
+enum FLAGS {	SCAN_MODE_RECURSIVE = 1,
+                SCAN_MODE_FILES = 2,
+                SCAN_MODE_DIRS = 4,
+                SCAN_MODE_NOEXTENSION = 8,
+                CHECK_CREATE = 1,
+                CHECK_CLEAR = 2,
+                CHECK_IGNORE_EMPTY = 4,
+                COPY = 1, //for renumber()
+                MOVE = 2};//for renumber()
 /**
  * This Class is used to collect information an paths for actions and operate an them.
  */
@@ -186,7 +186,7 @@ class Stat {
 	 * @param flags Flags for manipulating the behaviour. Can be a combination from SCAN_MODE_FILES, SCAN_MODE_DIRS, SCAN_MODE_RECURSIVE and SCAN_MODE_NOEXTENSION
 	 * @return void
 	 */
-	virtual void scan_directory( const fs::path &directory, int flags = SCAN_MODE_RECURSIVE | SCAN_MODE_FILES ) throw(RuntimeError*);
+    virtual void scan_directory( const fs::path &directory, int flags = SCAN_MODE_RECURSIVE | SCAN_MODE_FILES );
 	/**
 	 * @brief This function takes all files in the path container and rename them and puts them into out_dir
 	 *

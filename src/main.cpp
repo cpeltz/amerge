@@ -8,7 +8,7 @@
 
 const unsigned int VERSION_MAJOR = 1;
 const unsigned int VERSION_MINOR = 1;
-const unsigned int VERSION_PATCH = 0;
+const unsigned int VERSION_PATCH = 1;
 
 namespace po = boost::program_options;
 
@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
 	int start_number, sub_dir_boundary;
 	std::string out_dir, action;
 	std::vector< std::string > dirs;
-	po::options_description desc("Allowed options");
+	po::options_description desc("Allowed options");    
 	desc.add_options()
 		("help,h", "produce help message")
 		("version", "print version information")
@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
 		("clear-src,c", "removes source files when action is completed")
 		("create-sub-dirs,d", "automatical create sub-directories if there are to many files")
 		("create-sub-dirs-boundary,b", po::value<int>(&sub_dir_boundary)->default_value(1000), "number of files per sub-directorie if --create-sub-dirs is enabled")
-	;
+    ;
 	po::positional_options_description p;
 	p.add("input-dir", -1);
 

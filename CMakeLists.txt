@@ -1,7 +1,9 @@
+cmake_minimum_required(VERSION 2.8)
+
 project(amerge)
 
-set(Boost_Libs boost_filesystem boost_program_options)
-set(Boost_Test_Libs boost_filesystem boost_unit_test_framework)
+set(Boost_Libs boost_filesystem boost_program_options boost_system)
+set(Boost_Test_Libs boost_filesystem boost_unit_test_framework boost_system)
 
 find_package(Boost REQUIRED)
 
